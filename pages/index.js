@@ -1,8 +1,44 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
+import 'react-toastify/dist/ReactToastify.css';
+
+const notify = () => toast('Here is your toast.');
+
 
 export default function Home() {
+  const [firstName, setFirstName] = useState("");
+
+  const resetInputFields = () => {
+    setTimeout(() => {
+      setFirstName("");
+    }, 3000);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const body = {firstName};
+      await fetch("/api/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    console.log('bbebebeebe');
+  
+    toast('Good Job!', {
+      icon: '👏',
+    });
+    alert('aaaa')
+    toast('Good Job!', {
+      icon: '👏',
+    });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -15,6 +51,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -31,6 +68,24 @@ export default function Home() {
             <h2>Learn &rarr;</h2>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
+          <form className="form" onSubmit={submitHandler}>
+            <input
+              type="text"
+              className="form-field"
+              placeholder="First Name"
+              autoFocus
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+            />
+             <input
+              type="submit"
+              value="Submit"
+              className="submit-btn"
+              onClick={resetInputFields}
+            />
+            </form>
+
+
 
           <a
             href="https://github.com/vercel/next.js/tree/canary/examples"
